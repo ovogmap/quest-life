@@ -3,7 +3,7 @@ import { create, props } from "@stylexjs/stylex";
 import "./globals.css";
 import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
-import { colorVariable, sizeVariable } from "../styles/styleVariable.stylex";
+import { colorVariable, sizeVariable } from "@/styles/styleVariable.stylex";
 
 export const metadata: Metadata = {
   title: "Create Next App",

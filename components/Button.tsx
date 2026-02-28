@@ -2,7 +2,7 @@
 
 import { Button as RadixButton } from "@radix-ui/themes";
 import { create, props } from "@stylexjs/stylex";
-import { colorVariable, sizeVariable } from "../styles/styleVariable.stylex";
+import { colorVariable, sizeVariable } from "@/styles/styleVariable.stylex";
 
 type ButtonSize = "sm" | "md" | "lg";
 

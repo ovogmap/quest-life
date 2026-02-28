@@ -3,7 +3,7 @@
 import { create, props } from "@stylexjs/stylex";
 import ProgressBar from "@/components/ProgressBar";
 import * as Tabs from "@/components/Tabs";
-import { colorVariable } from "../../styles/styleVariable.stylex";
+import { colorVariable } from "@/styles/styleVariable.stylex";
 import { Text } from "@radix-ui/themes";
 import CreateQuestBottomSheet from "./_block/components/CreateQuestBottomSheet/CreateQuestBottomSheet";
 

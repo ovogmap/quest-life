@@ -1,7 +1,7 @@
 "use client";
 
 import { create, keyframes, props } from "@stylexjs/stylex";
-import { sizeVariable } from "../../../../../styles/styleVariable.stylex";
+import { sizeVariable } from "@/styles/styleVariable.stylex";
 import DrawerBottom from "@/components/Drawer";
 import { TextField } from "@radix-ui/themes";
 import { useState } from "react";

@@ -1,6 +1,6 @@
 import { Tabs } from "radix-ui";
 import { create, props } from "@stylexjs/stylex";
-import { colorVariable, sizeVariable } from "../../styles/styleVariable.stylex";
+import { colorVariable, sizeVariable } from "@/styles/styleVariable.stylex";
 
 export default function TabsTrigger({
   value,

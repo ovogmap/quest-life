@@ -2,7 +2,7 @@
 
 import { Drawer } from "vaul";
 import { create, props } from "@stylexjs/stylex";
-import { colorVariable, sizeVariable } from "../styles/styleVariable.stylex";
+import { colorVariable, sizeVariable } from "@/styles/styleVariable.stylex";
 import { PlusIcon } from "@radix-ui/react-icons";
 
 const DRAWER_MAX_HEIGHT = "82vh";
@@ -22,7 +22,7 @@ export default function DrawerBottom({
   const portalContainer =
     typeof document === "undefined"
       ? undefined
-      : (document.getElementById(PORTAL_ROOT_ID) ?? undefined);
+      : document.getElementById(PORTAL_ROOT_ID) ?? undefined;
 
   return (
     <Drawer.Root>

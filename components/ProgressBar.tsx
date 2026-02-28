@@ -1,6 +1,6 @@
 import * as Progress from "@radix-ui/react-progress";
 import { create, props } from "@stylexjs/stylex";
-import { colorVariable, sizeVariable } from "../styles/styleVariable.stylex";
+import { colorVariable, sizeVariable } from "@/styles/styleVariable.stylex";
 
 const MIN_PROGRESS_MAX = 1;
 
