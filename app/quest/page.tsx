@@ -2,15 +2,75 @@
 
 import { create, props } from "@stylexjs/stylex";
 import ProgressBar from "@/components/ProgressBar";
-import * as Tabs from "@/components/Tabs";
-import { colorVariable } from "@/styles/styleVariable.stylex";
+import { colorVariable, sizeVariable } from "@/styles/styleVariable.stylex";
 import { Text } from "@radix-ui/themes";
 import CreateQuestBottomSheet from "./_block/components/CreateQuestBottomSheet/CreateQuestBottomSheet";
+import { useState } from "react";
+import { Quest } from "./_block/types";
+import QuestCard from "./_block/components/QuestCard";
 
 const CURRENT_EXP = 320;
 const NEXT_LEVEL_EXP = 500;
 
+const QUEST_LIST: Quest[] = [
+  {
+    id: 1,
+    content: "코딩 테스트 3문제 풀기",
+    difficulty: "easy",
+    exp: 20,
+  },
+  {
+    id: 2,
+    content: "lv.3 문제 풀기",
+    difficulty: "normal",
+    exp: 40,
+  },
+  {
+    id: 3,
+    content: "코딩테스트 도전!",
+    difficulty: "hard",
+    exp: 60,
+  },
+  {
+    id: 4,
+    content: "코딩 테스트 3문제 풀기",
+    difficulty: "easy",
+    exp: 20,
+  },
+  {
+    id: 5,
+    content: "lv.3 문제 풀기",
+    difficulty: "normal",
+    exp: 40,
+  },
+  {
+    id: 6,
+    content: "코딩테스트 도전!",
+    difficulty: "hard",
+    exp: 60,
+  },
+  {
+    id: 7,
+    content: "코딩 테스트 3문제 풀기",
+    difficulty: "easy",
+    exp: 20,
+  },
+  {
+    id: 8,
+    content: "lv.3 문제 풀기",
+    difficulty: "normal",
+    exp: 40,
+  },
+  {
+    id: 9,
+    content: "코딩테스트 도전!",
+    difficulty: "hard",
+    exp: 60,
+  },
+];
+
 export default function QuestPage() {
+  const [questList, setQuestList] = useState<Quest[]>(QUEST_LIST);
   return (
     <div {...props(styles.container)}>
       <section {...props(styles.rankContainer)}>
@@ -24,22 +84,11 @@ export default function QuestPage() {
           color={colorVariable.purple}
         />
       </section>
-      <Tabs.Root defaultValue="all">
-        <Tabs.List>
-          <Tabs.Trigger value="all" color={colorVariable.green}>
-            일일
-          </Tabs.Trigger>
-          <Tabs.Trigger value="daily" color={colorVariable.blue}>
-            목표
-          </Tabs.Trigger>
-          <Tabs.Trigger value="weekly" color={colorVariable.gold}>
-            주간
-          </Tabs.Trigger>
-          <Tabs.Trigger value="monthly" color={colorVariable.red}>
-            월간
-          </Tabs.Trigger>
-        </Tabs.List>
-      </Tabs.Root>
+      <section {...props(styles.questListContainer)}>
+        {questList.map((quest) => (
+          <QuestCard key={quest.id} quest={quest} />
+        ))}
+      </section>
       <CreateQuestBottomSheet />
     </div>
   );
@@ -66,5 +115,11 @@ const styles = create({
     height: "160px",
     backgroundColor: colorVariable.green,
     borderRadius: "50%",
+  },
+  questListContainer: {
+    display: "flex",
+    flexDirection: "column",
+    gap: sizeVariable.size12,
+    width: sizeVariable.fullWidth,
   },
 });

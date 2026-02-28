@@ -4,6 +4,7 @@ import { Drawer } from "vaul";
 import { create, props } from "@stylexjs/stylex";
 import { colorVariable, sizeVariable } from "@/styles/styleVariable.stylex";
 import { PlusIcon } from "@radix-ui/react-icons";
+import { Text } from "@radix-ui/themes";
 
 const DRAWER_MAX_HEIGHT = "82vh";
 const DRAWER_RADIUS = "10px";
@@ -34,7 +35,14 @@ export default function DrawerBottom({
         <Drawer.Content {...props(styles.content)}>
           <div {...props(styles.contentInner)}>
             <Drawer.Handle />
-            <Drawer.Title {...props(styles.title)} />
+            <div>
+              <Drawer.Title {...props(styles.title)}>New Quest</Drawer.Title>
+              <Drawer.Description {...props(styles.description)}>
+                <Text size="1" color="gray">
+                  당신을 성장시킬 퀘스트를 만들어보세요
+                </Text>
+              </Drawer.Description>
+            </div>
             {children}
           </div>
         </Drawer.Content>
@@ -66,11 +74,11 @@ const styles = create({
     borderStyle: "solid",
     borderColor: colorVariable.transparent,
     cursor: "pointer",
-    transition: "background-color 150ms ease, border-color 150ms ease",
+    transition: "all 150ms ease",
 
     ":hover": {
-      borderColor: colorVariable.orange,
-      color: colorVariable.orange,
+      width: sizeVariable.size60,
+      height: sizeVariable.size60,
     },
   },
   overlay: {
@@ -99,8 +107,14 @@ const styles = create({
     padding: sizeVariable.size16,
     borderTopLeftRadius: DRAWER_RADIUS,
     borderTopRightRadius: DRAWER_RADIUS,
+    display: "flex",
+    flexDirection: "column",
+    gap: sizeVariable.size8,
   },
   title: {
-    visibility: "hidden",
+    margin: sizeVariable.size0,
+  },
+  description: {
+    margin: sizeVariable.size0,
   },
 });

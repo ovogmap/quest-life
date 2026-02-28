@@ -1,11 +1,12 @@
 "use client";
 
+import { HiOutlinePencilAlt } from "react-icons/hi";
 import { create, keyframes, props } from "@stylexjs/stylex";
 import { sizeVariable } from "@/styles/styleVariable.stylex";
 import DrawerBottom from "@/components/Drawer";
-import { TextField } from "@radix-ui/themes";
+import { Button, Text, TextField } from "@radix-ui/themes";
 import { useState } from "react";
-import { Card, QuestCategory } from "../../types";
+import { Card, Difficulty } from "../../types";
 import QuestCategoryCard from "./QuestCategoryCard";
 
 const CARD_PULSE_DURATION_MS = "900ms";
@@ -18,25 +19,25 @@ const cardPulseAnimation = keyframes({
 
 const CARD_LIST: Card[] = [
   {
-    name: "쉬움",
-    category: "easy",
+    value: "쉬움",
+    difficulty: "easy",
     exp: 20,
   },
   {
-    name: "보통",
-    category: "normal",
+    value: "보통",
+    difficulty: "normal",
     exp: 40,
   },
   {
-    name: "어려움",
-    category: "hard",
+    value: "어려움",
+    difficulty: "hard",
     exp: 60,
   },
 ];
 
 export default function CreateQuestBottomSheet() {
-  const [selectedQuestCategory, setSelectedQuestCategory] =
-    useState<QuestCategory | null>(null);
+  const [selectedDifficulty, setSelectedDifficulty] =
+    useState<Difficulty | null>(null);
   return (
     <DrawerBottom>
       <div {...props(styles.content)}>
@@ -44,19 +45,28 @@ export default function CreateQuestBottomSheet() {
           size="2"
           radius="medium"
           color="indigo"
-          placeholder="퀘스트 이름을 입력해주세요"
+          placeholder="퀘스트 내용을 입력해주세요"
         />
+        <Text size="1" color="gray">
+          퀘스트의 난이도를 선택해주세요.
+        </Text>
         <div {...props(styles.cardSelectContainer)}>
           {CARD_LIST.map((card, i) => (
             <QuestCategoryCard
-              key={card.category}
+              key={card.difficulty}
               card={card}
               index={i}
-              selectedQuestCategory={selectedQuestCategory}
-              setSelectedQuestCategory={setSelectedQuestCategory}
+              selectedDifficulty={selectedDifficulty}
+              setSelectedDifficulty={setSelectedDifficulty}
             />
           ))}
         </div>
+        <Button size="3">
+          <div {...props(styles.buttonContent)}>
+            <HiOutlinePencilAlt />
+            퀘스트 생성
+          </div>
+        </Button>
       </div>
     </DrawerBottom>
   );
@@ -64,7 +74,6 @@ export default function CreateQuestBottomSheet() {
 
 const styles = create({
   content: {
-    paddingBottom: "100px",
     display: "flex",
     flexDirection: "column",
     gap: sizeVariable.size12,
@@ -79,5 +88,11 @@ const styles = create({
     animationDuration: CARD_PULSE_DURATION_MS,
     animationTimingFunction: "ease-in-out",
     animationIterationCount: "infinite",
+  },
+  buttonContent: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: sizeVariable.size4,
   },
 });

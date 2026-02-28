@@ -1,7 +1,14 @@
-export type QuestCategory = "easy" | "normal" | "hard";
+export type Difficulty = "easy" | "normal" | "hard";
 
 export interface Card {
-  name: string;
-  category: QuestCategory;
+  value: string;
+  difficulty: Difficulty;
+  exp: number;
+}
+
+export interface Quest {
+  id: number;
+  content: string;
+  difficulty: Difficulty;
   exp: number;
 }

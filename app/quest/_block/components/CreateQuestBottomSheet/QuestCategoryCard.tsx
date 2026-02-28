@@ -1,7 +1,8 @@
 import { Text } from "@radix-ui/themes";
-import { Card, QuestCategory } from "../../types";
+import { Card, Difficulty } from "../../types";
 import { colorVariable, sizeVariable } from "@/styles/styleVariable.stylex";
 import { create, keyframes, props } from "@stylexjs/stylex";
+import { CircleIcon, RadiobuttonIcon } from "@radix-ui/react-icons";
 
 const CARD_PULSE_DURATION_MS = "900ms";
 const CARD_TRANSITION_DURATION_MS = "220ms";
@@ -15,24 +16,30 @@ const cardPulseAnimation = keyframes({
 export default function QuestCategoryCard({
   card,
   index,
-  selectedQuestCategory,
-  setSelectedQuestCategory,
+  selectedDifficulty,
+  setSelectedDifficulty,
 }: {
   card: Card;
   index: number;
-  selectedQuestCategory: QuestCategory | null;
-  setSelectedQuestCategory: (category: QuestCategory) => void;
+  selectedDifficulty: Difficulty | null;
+  setSelectedDifficulty: (difficulty: Difficulty) => void;
 }) {
+  const isSelected = selectedDifficulty === card.difficulty;
+  const cardColor =
+    card.difficulty === "easy"
+      ? colorVariable.green
+      : card.difficulty === "normal"
+      ? colorVariable.blue
+      : colorVariable.red;
   return (
     <div
-      key={card.category}
+      key={card.difficulty}
       {...props(
         styles.cardItem,
-        selectedQuestCategory === card.category && styles.cardItemSelected,
-        selectedQuestCategory === card.category &&
-          selectedCardStyles[card.category]
+        isSelected && styles.cardItemSelected,
+        isSelected && selectedCardStyles[card.difficulty]
       )}
-      onClick={() => setSelectedQuestCategory(card.category)}
+      onClick={() => setSelectedDifficulty(card.difficulty)}
     >
       <div
         style={{
@@ -42,9 +49,6 @@ export default function QuestCategoryCard({
           justifyContent: "space-between",
         }}
       >
-        <Text size="2" weight="bold">
-          {card.name}
-        </Text>
         <div
           style={{
             display: "flex",
@@ -59,8 +63,12 @@ export default function QuestCategoryCard({
             </Text>
           ))}
         </div>
+        {isSelected ? <RadiobuttonIcon color={cardColor} /> : <CircleIcon />}
       </div>
-      <Text size="1" weight="medium">
+      <Text size="2" weight="bold">
+        {card.value}
+      </Text>
+      <Text size="1" color="gray">
         exp:{card.exp}
       </Text>
     </div>
@@ -69,6 +77,7 @@ export default function QuestCategoryCard({
 
 const styles = create({
   cardItem: {
+    gap: sizeVariable.size4,
     boxSizing: "border-box",
     display: "flex",
     flexDirection: "column",

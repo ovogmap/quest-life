@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { create, props } from "@stylexjs/stylex";
-import "./globals.css";
 import "@radix-ui/themes/styles.css";
+import "./globals.css";
 import { Theme } from "@radix-ui/themes";
 import { colorVariable, sizeVariable } from "@/styles/styleVariable.stylex";
 
@@ -54,6 +54,7 @@ const styles = create({
     borderBottomWidth: sizeVariable.size1,
     borderBottomStyle: "solid",
     borderBottomColor: colorVariable.subBackground,
+    backgroundColor: colorVariable.mainBackground,
   },
   html: {
     backgroundColor: colorVariable.mainBackground,
