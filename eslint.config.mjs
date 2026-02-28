@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Config files use require() by necessity
+    "*.cjs",
+    "babel.config.js",
   ]),
 ]);
 

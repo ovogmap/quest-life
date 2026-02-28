@@ -1,16 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { create, props } from "@stylexjs/stylex";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import "@radix-ui/themes/styles.css";
+import { Theme } from "@radix-ui/themes";
+import { colorVariable, sizeVariable } from "../styles/styleVariable.stylex";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,12 +16,58 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="ko" {...props(styles.html)} suppressHydrationWarning>
+      <body {...props(styles.body)}>
+        <Theme appearance="dark">
+          <header {...props(styles.header)}>
+            <h1 {...props(styles.title)}>
+              Quest <span {...props(styles.span)}>Life</span>
+            </h1>
+          </header>
+          <main {...props(styles.main)}>{children}</main>
+          <div id="portal-root" />
+        </Theme>
       </body>
     </html>
   );
 }
+
+const styles = create({
+  title: {
+    fontSize: sizeVariable.size16,
+    fontWeight: "bold",
+    color: colorVariable.fontBase,
+    margin: sizeVariable.size0,
+  },
+  span: {
+    color: colorVariable.green,
+  },
+  header: {
+    width: sizeVariable.fullWidth,
+    height: sizeVariable.headerHeight,
+    position: "sticky",
+    top: sizeVariable.size0,
+    zIndex: 100,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderBottomWidth: sizeVariable.size1,
+    borderBottomStyle: "solid",
+    borderBottomColor: colorVariable.subBackground,
+  },
+  html: {
+    backgroundColor: colorVariable.mainBackground,
+  },
+  main: {
+    boxSizing: "border-box",
+    padding: sizeVariable.size20,
+    width: sizeVariable.fullWidth,
+    maxWidth: "800px",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+  body: {
+    boxSizing: "border-box",
+    width: sizeVariable.fullWidth,
+  },
+});
