@@ -4,7 +4,7 @@ import { Drawer } from "vaul";
 import { create, props } from "@stylexjs/stylex";
 import { colorVariable, sizeVariable } from "@/styles/styleVariable.stylex";
 import { PlusIcon } from "@radix-ui/react-icons";
-import { Button, ScrollArea } from "@radix-ui/themes";
+import { ScrollArea } from "@radix-ui/themes";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { CreateQuestFormSchema, CreateQuestFormType } from "../../types";
@@ -25,12 +25,11 @@ const PORTAL_ROOT_ID = "portal-root";
 
 export default function CreateQuestBottomSheet() {
   const [open, setOpen] = useState(false);
-  const [step, setStep] = useState<"main" | "side">("main");
   const methods = useForm({
     resolver: zodResolver(CreateQuestFormSchema),
     mode: "onChange",
   });
-  const { handleSubmit } = methods;
+  const { handleSubmit, reset } = methods;
   const portalContainer =
     typeof document === "undefined"
       ? undefined
@@ -39,6 +38,8 @@ export default function CreateQuestBottomSheet() {
   const onSubmit = (data: CreateQuestFormType) => {
     // TODO: 퀘스트 생성 로직 구현
     console.log(data);
+    setOpen(false);
+    reset();
   };
 
   return (
@@ -50,34 +51,18 @@ export default function CreateQuestBottomSheet() {
         <Drawer.Portal container={portalContainer}>
           <Drawer.Overlay {...props(styles.overlay)} />
           <Drawer.Content {...props(styles.content)}>
-            {step === "main" ? (
-              <>
-                <ScrollArea type="auto">
-                  <div {...props(styles.contentInner)}>
-                    <Drawer.Handle />
-                    <Drawer.Title {...props(styles.title)} />
-                    <div {...props(styles.bodyContent)}>
-                      <Header />
-                      <MainQuestEdit />
-                      <SideQuestList />
-                      <SubmitButton onSubmit={handleSubmit(onSubmit)} />
-                    </div>
-                  </div>
-                </ScrollArea>
-              </>
-            ) : (
-              <ScrollArea type="auto">
-                <div {...props(styles.contentInner)}>
-                  <Drawer.Handle />
-                  <Drawer.Title {...props(styles.title)} />
-                  <div {...props(styles.bodyContent)}>
-                    <Header />
-                  </div>
+            <ScrollArea type="auto">
+              <div {...props(styles.contentInner)}>
+                <Drawer.Handle />
+                <Drawer.Title {...props(styles.title)} />
+                <div {...props(styles.bodyContent)}>
+                  <Header />
+                  <MainQuestEdit />
+                  <SideQuestList />
+                  <SubmitButton onSubmit={handleSubmit(onSubmit)} />
                 </div>
-              </ScrollArea>
-            )}
-            <Button onClick={() => setStep("side")}>Next</Button>
-            <Button onClick={() => setStep("main")}>Prev</Button>
+              </div>
+            </ScrollArea>
           </Drawer.Content>
         </Drawer.Portal>
       </FormProvider>
