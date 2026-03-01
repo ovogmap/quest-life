@@ -1,149 +1,157 @@
 "use client";
 
-import { HiOutlinePencilAlt } from "react-icons/hi";
+import { Drawer } from "vaul";
 import { create, props } from "@stylexjs/stylex";
-import { sizeVariable } from "@/styles/styleVariable.stylex";
-import DrawerBottom from "@/app/quest/_block/components/CreateQuestBottomSheet/Drawer";
-import { Button, Flex, IconButton, Text, TextField } from "@radix-ui/themes";
-import { Card, CreateQuestForm } from "../../types";
-import QuestCategoryCard from "./QuestCategoryCard";
-import { PlusIcon, TrashIcon } from "@radix-ui/react-icons";
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import { colorVariable, sizeVariable } from "@/styles/styleVariable.stylex";
+import { PlusIcon } from "@radix-ui/react-icons";
+import { Button, ScrollArea } from "@radix-ui/themes";
+import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { CreateQuestFormSchema, CreateQuestFormType } from "../../types";
+import Header from "./Header";
+import MainQuestEdit from "./MainQuestEdit";
+import SideQuestList from "./SideQuestList";
+import SubmitButton from "./SubmitButton";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const CARD_LIST: Card[] = [
-  {
-    value: "쉬움",
-    difficulty: "easy",
-    exp: 20,
-  },
-  {
-    value: "보통",
-    difficulty: "normal",
-    exp: 40,
-  },
-  {
-    value: "어려움",
-    difficulty: "hard",
-    exp: 60,
-  },
-];
+const DRAWER_MAX_HEIGHT = "82vh";
+const DRAWER_RADIUS = "10px";
+const OVERLAY_COLOR = "rgba(0, 0, 0, 0.4)";
+const TRIGGER_SHADOW = "0 1px 2px rgba(0, 0, 0, 0.35)";
+const TRIGGER_Z_INDEX = 1;
+const OVERLAY_Z_INDEX = 2;
+const CONTENT_Z_INDEX = 3;
+const PORTAL_ROOT_ID = "portal-root";
 
 export default function CreateQuestBottomSheet() {
-  const methods = useForm<CreateQuestForm>();
-  const { register, control, handleSubmit } = methods;
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "sideQuests",
+  const [open, setOpen] = useState(false);
+  const [step, setStep] = useState<"main" | "side">("main");
+  const methods = useForm({
+    resolver: zodResolver(CreateQuestFormSchema),
+    mode: "onChange",
   });
+  const { handleSubmit } = methods;
+  const portalContainer =
+    typeof document === "undefined"
+      ? undefined
+      : document.getElementById(PORTAL_ROOT_ID) ?? undefined;
 
-  const onSubmit = (data: CreateQuestForm) => {
+  const onSubmit = (data: CreateQuestFormType) => {
     // TODO: 퀘스트 생성 로직 구현
     console.log(data);
   };
+
   return (
-    <FormProvider {...methods}>
-      <DrawerBottom>
-        <div {...props(styles.content)}>
-          <Flex direction="column" gap={sizeVariable.size4}>
-            <Text size="6" weight="bold" color="blue">
-              Main Quest
-            </Text>
-            <Text size="1" color="gray">
-              당신을 성장시킬 퀘스트를 만들어 보세요
-            </Text>
-          </Flex>
-          <TextField.Root
-            size="2"
-            radius="medium"
-            color="blue"
-            placeholder="메인 퀘스트를 입력해주세요"
-            {...register("title", { required: true })}
-          />
-          <Flex direction="column" gap={sizeVariable.size4}>
-            <Text size="1" color="gray">
-              퀘스트의 난이도를 선택해주세요
-            </Text>
-            <div {...props(styles.cardSelectContainer)}>
-              {CARD_LIST.map((card, i) => (
-                <QuestCategoryCard
-                  key={card.difficulty}
-                  card={card}
-                  index={i}
-                />
-              ))}
-            </div>
-          </Flex>
-          <Flex direction="column" gap={sizeVariable.size4}>
-            <Flex width="full" align="center" justify="between">
-              <Text size="1" color="gray">
-                목표를 달성하기 위한 사이드 퀘스트를 만들어 보세요
-              </Text>
-              <IconButton
-                variant="soft"
-                size="1"
-                color="gray"
-                onClick={() => append({ title: "" })}
-              >
-                <PlusIcon />
-              </IconButton>
-            </Flex>
-            <Flex direction="column" width="full" gap={sizeVariable.size8}>
-              {fields.map((field, index) => (
-                <Flex
-                  key={field.id}
-                  width="full"
-                  align="center"
-                  gap={sizeVariable.size12}
-                >
-                  <TextField.Root
-                    size="2"
-                    radius="medium"
-                    color="blue"
-                    placeholder="사이드 퀘스트를 입력해주세요"
-                    {...register(`sideQuests.${index}.title`, {
-                      required: true,
-                    })}
-                    style={{ flex: 1 }}
-                  />
-                  <IconButton
-                    variant="soft"
-                    size="1"
-                    color="gray"
-                    onClick={() => remove(index)}
-                  >
-                    <TrashIcon />
-                  </IconButton>
-                </Flex>
-              ))}
-            </Flex>
-          </Flex>
-          <Button size="3" color="blue" onClick={handleSubmit(onSubmit)}>
-            <div {...props(styles.buttonContent)}>
-              <HiOutlinePencilAlt />
-              퀘스트 생성
-            </div>
-          </Button>
-        </div>
-      </DrawerBottom>
-    </FormProvider>
+    <Drawer.Root open={open} onOpenChange={setOpen}>
+      <FormProvider {...methods}>
+        <Drawer.Trigger {...props(styles.trigger)}>
+          <PlusIcon width={20} height={20} />
+        </Drawer.Trigger>
+        <Drawer.Portal container={portalContainer}>
+          <Drawer.Overlay {...props(styles.overlay)} />
+          <Drawer.Content {...props(styles.content)}>
+            {step === "main" ? (
+              <>
+                <ScrollArea type="auto">
+                  <div {...props(styles.contentInner)}>
+                    <Drawer.Handle />
+                    <Drawer.Title {...props(styles.title)} />
+                    <div {...props(styles.bodyContent)}>
+                      <Header />
+                      <MainQuestEdit />
+                      <SideQuestList />
+                      <SubmitButton onSubmit={handleSubmit(onSubmit)} />
+                    </div>
+                  </div>
+                </ScrollArea>
+              </>
+            ) : (
+              <ScrollArea type="auto">
+                <div {...props(styles.contentInner)}>
+                  <Drawer.Handle />
+                  <Drawer.Title {...props(styles.title)} />
+                  <div {...props(styles.bodyContent)}>
+                    <Header />
+                  </div>
+                </div>
+              </ScrollArea>
+            )}
+            <Button onClick={() => setStep("side")}>Next</Button>
+            <Button onClick={() => setStep("main")}>Prev</Button>
+          </Drawer.Content>
+        </Drawer.Portal>
+      </FormProvider>
+    </Drawer.Root>
   );
 }
 
 const styles = create({
-  content: {
-    display: "flex",
-    flexDirection: "column",
-    gap: sizeVariable.size16,
-  },
-  cardSelectContainer: {
-    display: "grid",
-    gridTemplateColumns: "repeat(3, 1fr)",
-    gap: sizeVariable.size8,
-  },
-  buttonContent: {
+  trigger: {
+    position: "fixed",
+    bottom: sizeVariable.size0,
+    left: "50%",
+    transform: "translateX(-50%) translateY(-30px)",
+    zIndex: TRIGGER_Z_INDEX,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    gap: sizeVariable.size4,
+    flexShrink: 0,
+    gap: sizeVariable.size8,
+    overflow: "hidden",
+    borderRadius: "50%",
+    width: sizeVariable.size50,
+    height: sizeVariable.size50,
+    color: colorVariable.white,
+    backgroundColor: colorVariable.subBackground,
+    boxShadow: TRIGGER_SHADOW,
+    borderWidth: sizeVariable.size1,
+    borderStyle: "solid",
+    borderColor: colorVariable.transparent,
+    cursor: "pointer",
+    transition: "all 150ms ease",
+
+    ":hover": {
+      width: sizeVariable.size60,
+      height: sizeVariable.size60,
+    },
+  },
+  overlay: {
+    position: "fixed",
+    inset: 0,
+    backgroundColor: OVERLAY_COLOR,
+    zIndex: OVERLAY_Z_INDEX,
+  },
+  content: {
+    zIndex: CONTENT_Z_INDEX,
+    position: "fixed",
+    left: sizeVariable.size0,
+    right: sizeVariable.size0,
+    bottom: sizeVariable.size0,
+    display: "flex",
+    flexDirection: "column",
+    maxHeight: DRAWER_MAX_HEIGHT,
+    backgroundColor: colorVariable.mainBackground,
+    borderTopLeftRadius: DRAWER_RADIUS,
+    borderTopRightRadius: DRAWER_RADIUS,
+    borderTopWidth: sizeVariable.size1,
+    borderTopStyle: "solid",
+    borderTopColor: colorVariable.subBackground,
+  },
+  contentInner: {
+    padding: sizeVariable.size16,
+    borderTopLeftRadius: DRAWER_RADIUS,
+    borderTopRightRadius: DRAWER_RADIUS,
+    display: "flex",
+    flexDirection: "column",
+    gap: sizeVariable.size8,
+  },
+  title: {
+    margin: sizeVariable.size0,
+    visibility: "hidden",
+  },
+  bodyContent: {
+    display: "flex",
+    flexDirection: "column",
+    gap: sizeVariable.size16,
   },
 });

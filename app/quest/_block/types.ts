@@ -1,4 +1,4 @@
-export type Difficulty = "easy" | "normal" | "hard";
+import z from "zod";
 
 export interface Card {
   value: string;
@@ -28,7 +28,19 @@ export interface MainQuest {
   sideQuests: SideQuest[];
 }
 
-export interface CreateQuestForm
-  extends Omit<MainQuest, "id" | "isCompleted" | "sideQuests"> {
-  sideQuests: Omit<SideQuest, "id" | "isCompleted">[];
-}
+const DifficultySchema = z.enum(["easy", "normal", "hard"] as const);
+
+export type Difficulty = z.infer<typeof DifficultySchema>;
+
+export const CreateQuestFormSchema = z.object({
+  title: z.string(),
+  difficulty: DifficultySchema,
+  exp: z.number(),
+  sideQuests: z.array(
+    z.object({
+      title: z.string(),
+    })
+  ),
+});
+
+export type CreateQuestFormType = z.infer<typeof CreateQuestFormSchema>;

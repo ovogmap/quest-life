@@ -32,8 +32,8 @@ export default function QuestCategoryCard({
       : colorVariable.red;
 
   const handleSelectCard = () => {
-    setValue("difficulty", card.difficulty);
-    setValue("exp", card.exp);
+    setValue("difficulty", card.difficulty, { shouldValidate: true });
+    setValue("exp", card.exp, { shouldValidate: true });
   };
   return (
     <div
