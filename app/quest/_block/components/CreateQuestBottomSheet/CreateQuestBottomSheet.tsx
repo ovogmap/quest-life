@@ -5,7 +5,7 @@ import { create, props } from "@stylexjs/stylex";
 import { colorVariable, sizeVariable } from "@/styles/styleVariable.stylex";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@radix-ui/themes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { CreateQuestFormSchema, CreateQuestFormType } from "../../types";
 import Header from "./Header";
@@ -35,6 +35,12 @@ export default function CreateQuestBottomSheet() {
       ? undefined
       : document.getElementById(PORTAL_ROOT_ID) ?? undefined;
 
+  const handleOpenChange = (nextOpen: boolean) => {
+    setOpen(nextOpen);
+    if (!nextOpen) {
+      reset();
+    }
+  };
   const onSubmit = (data: CreateQuestFormType) => {
     // TODO: 퀘스트 생성 로직 구현
     console.log(data);
@@ -43,7 +49,7 @@ export default function CreateQuestBottomSheet() {
   };
 
   return (
-    <Drawer.Root open={open} onOpenChange={setOpen}>
+    <Drawer.Root open={open} onOpenChange={handleOpenChange}>
       <FormProvider {...methods}>
         <Drawer.Trigger {...props(styles.trigger)}>
           <PlusIcon width={20} height={20} />

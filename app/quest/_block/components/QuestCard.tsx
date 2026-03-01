@@ -19,28 +19,27 @@ export default function QuestCard({ quest }: { quest: Quest }) {
       ? "🔥🔥"
       : "🔥🔥🔥";
   return (
-    <div {...props(styles.container)}>
-      <button {...props(styles.checkButton)}>
-        <CircleIcon />
-      </button>
-      <div {...props(styles.content)}>
-        <Text size="2" weight="bold">
-          {quest.content}
-        </Text>
-        <Badge color={difficultyColor} size="1" radius="large">
-          {difficultyIcon} {quest.difficulty} / exp: +{quest.exp}
-        </Badge>
-      </div>
-    </div>
+    <details {...props(styles.details)}>
+      <summary {...props(styles.container)}>
+        <button {...props(styles.checkButton)}>
+          <CircleIcon />
+        </button>
+        <div {...props(styles.content)}>
+          <Text size="2" weight="bold">
+            {quest.content}
+          </Text>
+          <Badge color={difficultyColor} size="1" radius="large">
+            {difficultyIcon} {quest.difficulty} / exp: +{quest.exp}
+          </Badge>
+        </div>
+      </summary>
+      <div style={{ overflow: "hidden" }}>사이드 퀘스트 리스트.</div>
+    </details>
   );
 }
 
 const styles = create({
-  container: {
-    display: "flex",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    gap: sizeVariable.size4,
+  details: {
     width: sizeVariable.fullWidth,
     borderRadius: sizeVariable.size12,
     borderWidth: sizeVariable.size1,
@@ -48,6 +47,13 @@ const styles = create({
     borderColor: colorVariable.subBackground,
     padding: sizeVariable.size12,
     boxSizing: "border-box",
+    overflow: "hidden",
+  },
+  container: {
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    gap: sizeVariable.size4,
   },
   content: {
     display: "flex",
