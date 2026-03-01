@@ -4,7 +4,7 @@ import { Drawer } from "vaul";
 import { create, props } from "@stylexjs/stylex";
 import { colorVariable, sizeVariable } from "@/styles/styleVariable.stylex";
 import { PlusIcon } from "@radix-ui/react-icons";
-import { Text } from "@radix-ui/themes";
+import { ScrollArea } from "@radix-ui/themes";
 
 const DRAWER_MAX_HEIGHT = "82vh";
 const DRAWER_RADIUS = "10px";
@@ -27,24 +27,20 @@ export default function DrawerBottom({
 
   return (
     <Drawer.Root>
+      <Drawer.Close />
       <Drawer.Trigger {...props(styles.trigger)}>
         <PlusIcon width={20} height={20} />
       </Drawer.Trigger>
       <Drawer.Portal container={portalContainer}>
         <Drawer.Overlay {...props(styles.overlay)} />
         <Drawer.Content {...props(styles.content)}>
-          <div {...props(styles.contentInner)}>
-            <Drawer.Handle />
-            <div>
-              <Drawer.Title {...props(styles.title)}>New Quest</Drawer.Title>
-              <Drawer.Description {...props(styles.description)}>
-                <Text size="1" color="gray">
-                  당신을 성장시킬 퀘스트를 만들어보세요
-                </Text>
-              </Drawer.Description>
+          <ScrollArea type="auto">
+            <div {...props(styles.contentInner)}>
+              <Drawer.Handle />
+              <Drawer.Title {...props(styles.title)} />
+              {children}
             </div>
-            {children}
-          </div>
+          </ScrollArea>
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>
@@ -113,6 +109,7 @@ const styles = create({
   },
   title: {
     margin: sizeVariable.size0,
+    visibility: "hidden",
   },
   description: {
     margin: sizeVariable.size0,

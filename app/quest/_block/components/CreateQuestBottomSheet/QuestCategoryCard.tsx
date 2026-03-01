@@ -1,8 +1,9 @@
 import { Text } from "@radix-ui/themes";
-import { Card, Difficulty } from "../../types";
+import { Card } from "../../types";
 import { colorVariable, sizeVariable } from "@/styles/styleVariable.stylex";
 import { create, keyframes, props } from "@stylexjs/stylex";
 import { CircleIcon, RadiobuttonIcon } from "@radix-ui/react-icons";
+import { useFormContext } from "react-hook-form";
 
 const CARD_PULSE_DURATION_MS = "900ms";
 const CARD_TRANSITION_DURATION_MS = "220ms";
@@ -16,21 +17,24 @@ const cardPulseAnimation = keyframes({
 export default function QuestCategoryCard({
   card,
   index,
-  selectedDifficulty,
-  setSelectedDifficulty,
 }: {
   card: Card;
   index: number;
-  selectedDifficulty: Difficulty | null;
-  setSelectedDifficulty: (difficulty: Difficulty) => void;
 }) {
-  const isSelected = selectedDifficulty === card.difficulty;
+  const { setValue, watch } = useFormContext();
+  const difficulty = watch("difficulty");
+  const isSelected = difficulty === card.difficulty;
   const cardColor =
     card.difficulty === "easy"
       ? colorVariable.green
       : card.difficulty === "normal"
       ? colorVariable.blue
       : colorVariable.red;
+
+  const handleSelectCard = () => {
+    setValue("difficulty", card.difficulty);
+    setValue("exp", card.exp);
+  };
   return (
     <div
       key={card.difficulty}
@@ -39,7 +43,7 @@ export default function QuestCategoryCard({
         isSelected && styles.cardItemSelected,
         isSelected && selectedCardStyles[card.difficulty]
       )}
-      onClick={() => setSelectedDifficulty(card.difficulty)}
+      onClick={handleSelectCard}
     >
       <div
         style={{
